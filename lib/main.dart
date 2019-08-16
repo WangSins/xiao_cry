@@ -84,6 +84,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[100],
       body: RefreshIndicator(
           color: Colors.grey,
           child: StaggeredGridView.countBuilder(
@@ -93,7 +94,6 @@ class _MyHomePageState extends State<MyHomePage> {
             itemBuilder: (context, index) {
               return Card(
                 elevation: 2.0,
-                color: Colors.grey[100],
                 child: Padding(
                   padding: const EdgeInsets.all(4.0),
                   child: Column(
