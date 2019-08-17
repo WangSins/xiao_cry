@@ -27,39 +27,38 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  List<JokeResult> lists = [];
+  List<JokeData> lists = [];
   ScrollController _scrollController = ScrollController();
-  final String baseUrl = "https://api.apiopen.top/";
-  final String type = "text";
-  final int count = 20;
+  final String baseUrl = "https://www.apiopen.top/";
+  final int type = 2;
   int page = 0;
 
   _initData() async {
-    Response response = await Dio()
-        .get(baseUrl + "getJoke?page=${page = 0}&count=$count&type=$type");
+    Response response =
+        await Dio().get(baseUrl + "satinGodApi?type=$type&page=${page = 0}");
     var jokeEntity = JokeEntity.fromJson(json.decode(response.toString()));
     setState(() {
-      lists = jokeEntity.result;
+      lists = jokeEntity.data;
     });
     print("_initData()：${lists.length}");
   }
 
   _loadMore() async {
-    Response response = await Dio()
-        .get(baseUrl + "getJoke?page=${++page}&count=$count&type=$type");
+    Response response =
+        await Dio().get(baseUrl + "satinGodApi?type=$type&page=${++page}");
     var jokeEntity = JokeEntity.fromJson(json.decode(response.toString()));
     setState(() {
-      lists.addAll(jokeEntity.result.toList());
+      lists.addAll(jokeEntity.data.toList());
     });
     print("_getMore()：${lists.length}");
   }
 
   Future<void> _onRefresh() async {
-    Response response = await Dio()
-        .get(baseUrl + "getJoke?page=${page = 0}&count=$count&type=$type");
+    Response response =
+        await Dio().get(baseUrl + "satinGodApi?type=$type&page=${page = 0}");
     var jokeEntity = JokeEntity.fromJson(json.decode(response.toString()));
     setState(() {
-      lists = jokeEntity.result;
+      lists = jokeEntity.data;
     });
     print("_onRefresh()：${lists.length}");
   }
@@ -101,7 +100,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     children: <Widget>[
                       Text(lists[index].text),
                       Text(
-                        "热评：${lists[index].topCommentsContent ?? "暂无热评"}",
+                        "热评：${lists[index].topCommentscontent ?? "暂无热评"}",
                         style:
                             TextStyle(color: Colors.blueGrey, fontSize: 12.0),
                       ),
