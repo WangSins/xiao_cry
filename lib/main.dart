@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import 'dart:convert';
 
 import 'package:xiao_cry/entity/joke_entity.dart';
+import 'package:xiao_cry/constant/api_constant.dart';
 
 void main() => runApp(MyApp());
 
@@ -27,40 +28,41 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  List<JokeData> lists = [];
+  List<JokeData> _lists = [];
   ScrollController _scrollController = ScrollController();
-  final String baseUrl = "https://www.apiopen.top/";
-  final int type = 2;
-  int page = 0;
+  int _page = 0;
 
   _initData() async {
-    Response response =
-        await Dio().get(baseUrl + "satinGodApi?type=$type&page=${page = 0}");
+    Response response = await Dio().get(APIConstant.BASE_URL +
+        APIConstant.ACTION_SATIN_GOD_API +
+        "?type=${APIConstant.TYPE_TEXT}&page=${_page = 0}");
     var jokeEntity = JokeEntity.fromJson(json.decode(response.toString()));
     setState(() {
-      lists = jokeEntity.data;
+      _lists = jokeEntity.data;
     });
-    print("_initData()：${lists.length}");
+    print("_initData()：${_lists.length}");
   }
 
   _loadMore() async {
-    Response response =
-        await Dio().get(baseUrl + "satinGodApi?type=$type&page=${++page}");
+    Response response = await Dio().get(APIConstant.BASE_URL +
+        APIConstant.ACTION_SATIN_GOD_API +
+        "?type=${APIConstant.TYPE_TEXT}&page=${++_page}");
     var jokeEntity = JokeEntity.fromJson(json.decode(response.toString()));
     setState(() {
-      lists.addAll(jokeEntity.data.toList());
+      _lists.addAll(jokeEntity.data.toList());
     });
-    print("_getMore()：${lists.length}");
+    print("_getMore()：${_lists.length}");
   }
 
   Future<void> _onRefresh() async {
-    Response response =
-        await Dio().get(baseUrl + "satinGodApi?type=$type&page=${page = 0}");
+    Response response = await Dio().get(APIConstant.BASE_URL +
+        APIConstant.ACTION_SATIN_GOD_API +
+        "?type=${APIConstant.TYPE_TEXT}&page=${_page = 0}");
     var jokeEntity = JokeEntity.fromJson(json.decode(response.toString()));
     setState(() {
-      lists = jokeEntity.data;
+      _lists = jokeEntity.data;
     });
-    print("_onRefresh()：${lists.length}");
+    print("_onRefresh()：${_lists.length}");
   }
 
   @override
@@ -89,7 +91,7 @@ class _MyHomePageState extends State<MyHomePage> {
           child: StaggeredGridView.countBuilder(
             controller: _scrollController,
             crossAxisCount: 4,
-            itemCount: lists.length,
+            itemCount: _lists.length,
             itemBuilder: (context, index) {
               return Card(
                 elevation: 2.0,
@@ -98,9 +100,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text(lists[index].text),
+                      Text(_lists[index].text),
                       Text(
-                        "热评：${lists[index].topCommentscontent ?? "暂无热评"}",
+                        "热评：${_lists[index].topCommentscontent ?? "暂无热评"}",
                         style:
                             TextStyle(color: Colors.blueGrey, fontSize: 12.0),
                       ),
