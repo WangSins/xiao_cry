@@ -1,5 +1,5 @@
 class APIConstant {
-  static const String BASE_URL = "https://www.apiopen.top/";
-  static const String ACTION_SATIN_GOD_API = "satinGodApi";
-  static const int TYPE_TEXT = 2;
+  static const String BASE_URL = "https://api.apiopen.top/";
+  static const String ACTION_GET_JOKE = "getJoke";
+  static const String TYPE_TEXT = "text";
 }

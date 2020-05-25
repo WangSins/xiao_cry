@@ -1,117 +1,117 @@
 class JokeEntity {
-  String msg;
   int code;
-  List<JokeData> data;
+  String message;
+  List<JokeResult> result;
 
-  JokeEntity({this.msg, this.code, this.data});
+  JokeEntity({this.code, this.message, this.result});
 
   JokeEntity.fromJson(Map<String, dynamic> json) {
-    msg = json['msg'];
     code = json['code'];
-    if (json['data'] != null) {
-      data = new List<JokeData>();
-      (json['data'] as List).forEach((v) {
-        data.add(new JokeData.fromJson(v));
+    message = json['message'];
+    if (json['result'] != null) {
+      result = new List<JokeResult>();
+      json['result'].forEach((v) {
+        result.add(new JokeResult.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['msg'] = this.msg;
     data['code'] = this.code;
-    if (this.data != null) {
-      data['data'] = this.data.map((v) => v.toJson()).toList();
+    data['message'] = this.message;
+    if (this.result != null) {
+      data['result'] = this.result.map((v) => v.toJson()).toList();
     }
     return data;
   }
 }
 
-class JokeData {
-  String topCommentscontent;
-  dynamic image;
-  dynamic thumbnail;
-  dynamic gif;
-  dynamic topCommentsvoiceuri;
-  int forward;
-  dynamic video;
-  String type;
-  String topCommentsheader;
-  int down;
-  String uid;
-  String passtime;
-  String header;
-  int comment;
+class JokeResult {
+  String sid;
   String text;
-  int soureid;
-  int up;
-  String topCommentsname;
-  String username;
+  String type;
+  String thumbnail;
+  String video;
+  String images;
+  String up;
+  String down;
+  String forward;
+  String comment;
+  String uid;
+  String name;
+  String header;
+  String topCommentsContent;
+  String topCommentsVoiceuri;
+  String topCommentsUid;
+  String topCommentsName;
+  String topCommentsHeader;
+  String passtime;
 
-  JokeData(
-      {this.topCommentscontent,
-      this.image,
-      this.thumbnail,
-      this.gif,
-      this.topCommentsvoiceuri,
-      this.forward,
-      this.video,
-      this.type,
-      this.topCommentsheader,
-      this.down,
-      this.uid,
-      this.passtime,
-      this.header,
-      this.comment,
-      this.text,
-      this.soureid,
-      this.up,
-      this.topCommentsname,
-      this.username});
+  JokeResult(
+      {this.sid,
+        this.text,
+        this.type,
+        this.thumbnail,
+        this.video,
+        this.images,
+        this.up,
+        this.down,
+        this.forward,
+        this.comment,
+        this.uid,
+        this.name,
+        this.header,
+        this.topCommentsContent,
+        this.topCommentsVoiceuri,
+        this.topCommentsUid,
+        this.topCommentsName,
+        this.topCommentsHeader,
+        this.passtime});
 
-  JokeData.fromJson(Map<String, dynamic> json) {
-    topCommentscontent = json['top_commentsContent'];
-    image = json['image'];
-    thumbnail = json['thumbnail'];
-    gif = json['gif'];
-    topCommentsvoiceuri = json['top_commentsVoiceuri'];
-    forward = json['forward'];
-    video = json['video'];
-    type = json['type'];
-    topCommentsheader = json['top_commentsHeader'];
-    down = json['down'];
-    uid = json['uid'];
-    passtime = json['passtime'];
-    header = json['header'];
-    comment = json['comment'];
+  JokeResult.fromJson(Map<String, dynamic> json) {
+    sid = json['sid'];
     text = json['text'];
-    soureid = json['soureid'];
+    type = json['type'];
+    thumbnail = json['thumbnail'];
+    video = json['video'];
+    images = json['images'];
     up = json['up'];
-    topCommentsname = json['top_commentsName'];
-    username = json['username'];
+    down = json['down'];
+    forward = json['forward'];
+    comment = json['comment'];
+    uid = json['uid'];
+    name = json['name'];
+    header = json['header'];
+    topCommentsContent = json['top_comments_content'];
+    topCommentsVoiceuri = json['top_comments_voiceuri'];
+    topCommentsUid = json['top_comments_uid'];
+    topCommentsName = json['top_comments_name'];
+    topCommentsHeader = json['top_comments_header'];
+    passtime = json['passtime'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['top_commentsContent'] = this.topCommentscontent;
-    data['image'] = this.image;
-    data['thumbnail'] = this.thumbnail;
-    data['gif'] = this.gif;
-    data['top_commentsVoiceuri'] = this.topCommentsvoiceuri;
-    data['forward'] = this.forward;
-    data['video'] = this.video;
-    data['type'] = this.type;
-    data['top_commentsHeader'] = this.topCommentsheader;
-    data['down'] = this.down;
-    data['uid'] = this.uid;
-    data['passtime'] = this.passtime;
-    data['header'] = this.header;
-    data['comment'] = this.comment;
+    data['sid'] = this.sid;
     data['text'] = this.text;
-    data['soureid'] = this.soureid;
+    data['type'] = this.type;
+    data['thumbnail'] = this.thumbnail;
+    data['video'] = this.video;
+    data['images'] = this.images;
     data['up'] = this.up;
-    data['top_commentsName'] = this.topCommentsname;
-    data['username'] = this.username;
+    data['down'] = this.down;
+    data['forward'] = this.forward;
+    data['comment'] = this.comment;
+    data['uid'] = this.uid;
+    data['name'] = this.name;
+    data['header'] = this.header;
+    data['top_comments_content'] = this.topCommentsContent;
+    data['top_comments_voiceuri'] = this.topCommentsVoiceuri;
+    data['top_comments_uid'] = this.topCommentsUid;
+    data['top_comments_name'] = this.topCommentsName;
+    data['top_comments_header'] = this.topCommentsHeader;
+    data['passtime'] = this.passtime;
     return data;
   }
 }

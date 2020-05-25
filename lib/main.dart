@@ -1,11 +1,10 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:http/http.dart' as http;
-import 'package:dio/dio.dart';
 import 'dart:convert';
 
-import 'package:xiao_cry/entity/joke_entity.dart';
+import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:xiao_cry/constant/api_constant.dart';
+import 'package:xiao_cry/entity/joke_entity.dart';
 
 void main() => runApp(MyApp());
 
@@ -28,39 +27,39 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  List<JokeData> _lists = [];
+  List<JokeResult> _lists = [];
   ScrollController _scrollController = ScrollController();
   int _page = 0;
 
   _initData() async {
     Response response = await Dio().get(APIConstant.BASE_URL +
-        APIConstant.ACTION_SATIN_GOD_API +
+        APIConstant.ACTION_GET_JOKE +
         "?type=${APIConstant.TYPE_TEXT}&page=${_page = 0}");
     var jokeEntity = JokeEntity.fromJson(json.decode(response.toString()));
     setState(() {
-      _lists = jokeEntity.data;
+      _lists = jokeEntity.result;
     });
     print("_initData()：${_lists.length}");
   }
 
   _loadMore() async {
     Response response = await Dio().get(APIConstant.BASE_URL +
-        APIConstant.ACTION_SATIN_GOD_API +
+        APIConstant.ACTION_GET_JOKE +
         "?type=${APIConstant.TYPE_TEXT}&page=${++_page}");
     var jokeEntity = JokeEntity.fromJson(json.decode(response.toString()));
     setState(() {
-      _lists.addAll(jokeEntity.data.toList());
+      _lists.addAll(jokeEntity.result.toList());
     });
     print("_getMore()：${_lists.length}");
   }
 
   Future<void> _onRefresh() async {
     Response response = await Dio().get(APIConstant.BASE_URL +
-        APIConstant.ACTION_SATIN_GOD_API +
+        APIConstant.ACTION_GET_JOKE +
         "?type=${APIConstant.TYPE_TEXT}&page=${_page = 0}");
     var jokeEntity = JokeEntity.fromJson(json.decode(response.toString()));
     setState(() {
-      _lists = jokeEntity.data;
+      _lists = jokeEntity.result;
     });
     print("_onRefresh()：${_lists.length}");
   }
@@ -102,7 +101,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     children: <Widget>[
                       Text(_lists[index].text),
                       Text(
-                        "热评：${_lists[index].topCommentscontent ?? "暂无热评"}",
+                        "热评：${_lists[index].topCommentsContent ?? "暂无热评"}",
                         style:
                             TextStyle(color: Colors.blueGrey, fontSize: 12.0),
                       ),
