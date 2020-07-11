@@ -30,48 +30,50 @@ class _MyHomePageState extends State<MyHomePage> {
   List<JokeResult> _lists = [];
   ScrollController _scrollController = ScrollController();
   int _page = 0;
+  bool _showFBA = false;
 
-  _initData() async {
+   _loadMore(bool isRefresh) async {
     Response response = await Dio().get(APIConstant.BASE_URL +
         APIConstant.ACTION_GET_JOKE +
-        "?type=${APIConstant.TYPE_TEXT}&page=${_page = 0}");
+        "?type=${APIConstant.TYPE_TEXT}&count=${APIConstant.DEFAULT_COUNT}&page=${isRefresh ? _page = 0 : ++_page}");
     var jokeEntity = JokeEntity.fromJson(json.decode(response.toString()));
     setState(() {
-      _lists = jokeEntity.result;
+      if (isRefresh) {
+        _lists = jokeEntity.result;
+      } else {
+        _lists.addAll(jokeEntity.result.toList());
+      }
     });
-    print("_initData()：${_lists.length}");
-  }
-
-  _loadMore() async {
-    Response response = await Dio().get(APIConstant.BASE_URL +
-        APIConstant.ACTION_GET_JOKE +
-        "?type=${APIConstant.TYPE_TEXT}&page=${++_page}");
-    var jokeEntity = JokeEntity.fromJson(json.decode(response.toString()));
-    setState(() {
-      _lists.addAll(jokeEntity.result.toList());
-    });
-    print("_getMore()：${_lists.length}");
   }
 
   Future<void> _onRefresh() async {
     Response response = await Dio().get(APIConstant.BASE_URL +
         APIConstant.ACTION_GET_JOKE +
-        "?type=${APIConstant.TYPE_TEXT}&page=${_page = 0}");
+        "?type=${APIConstant.TYPE_TEXT}&count=${APIConstant.DEFAULT_COUNT}&page=${_page = 0}");
     var jokeEntity = JokeEntity.fromJson(json.decode(response.toString()));
     setState(() {
       _lists = jokeEntity.result;
     });
-    print("_onRefresh()：${_lists.length}");
   }
 
   @override
   void initState() {
     super.initState();
-    _initData();
+    _loadMore(true);
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
-        _loadMore();
+        _loadMore(false);
+      }
+      if (_scrollController.offset >
+          _scrollController.position.minScrollExtent) {
+        setState(() {
+          _showFBA = true;
+        });
+      } else {
+        setState(() {
+          _showFBA = false;
+        });
       }
     });
   }
@@ -113,6 +115,18 @@ class _MyHomePageState extends State<MyHomePage> {
             staggeredTileBuilder: (int index) => new StaggeredTile.fit(2),
           ),
           onRefresh: _onRefresh),
+      floatingActionButton: !_showFBA
+          ? null
+          : FloatingActionButton(
+              onPressed: () {
+                _scrollController.jumpTo(0);
+              },
+              child: Icon(
+                Icons.arrow_upward,
+              ),
+              backgroundColor: Colors.grey[100],
+              heroTag: APIConstant.TYPE_TEXT,
+            ),
     );
   }
 }
